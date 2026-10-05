@@ -1,0 +1,60 @@
+mport java.util.*;
+
+class InsufficientBalanceException extends Exception {
+    InsufficientBalanceException(String message) {
+        super(message);
+    }
+}
+
+class Account {
+    String accountHolderName;
+    double accountBalance;
+
+    Account(String accountHolderName, double accountBalance) {
+        this.accountHolderName = accountHolderName;
+        this.accountBalance = accountBalance;
+    }
+
+    void withdraw(double amount) throws InsufficientBalanceException {
+        if (amount < 0) {
+            System.out.println("Withdrawal amount cannot be negative.");
+        } else if (amount > accountBalance) {
+            throw new InsufficientBalanceException("Insufficient balance. Available balance: ₹" + accountBalance);
+        } else {
+            accountBalance -= amount;
+            System.out.println("Withdrawal successful.");
+            System.out.println("Withdrawn amount: ₹" + amount);
+            System.out.println("Remaining balance: ₹" + accountBalance);
+        }
+    }
+
+    void displayDetails() {
+        System.out.println("Account Holder: " + accountHolderName);
+        System.out.println("Account Balance: ₹" + accountBalance);
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        Account account = new Account("Rahul", 10000);
+
+        account.displayDetails();
+
+        System.out.print("Enter withdrawal amount: ");
+
+        try {
+            double amount = sc.nextDouble();
+            account.withdraw(amount);
+        } catch (InsufficientBalanceException e) {
+            System.out.println("Transaction failed: " + e.getMessage());
+        } catch (InputMismatchException e) {
+            System.out.println("Invalid input. Please enter a numeric amount.");
+        } catch (NullPointerException e) {
+            System.out.println("Account object is null.");
+        }
+
+        System.out.println("Thank you for using the ATM.");
+    }
+}
